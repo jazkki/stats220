@@ -1,0 +1,94 @@
+---
+title: My dynamic report
+output: html_fragment
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo=FALSE, message=FALSE, warning=FALSE, error=FALSE)
+
+```
+
+```{css}
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100..900&display=swap');
+
+h1, h2, h3 {
+  padding:10px
+}
+
+body {
+  font-family: 'Roboto Slab';
+}
+```
+
+## Dynamic Report of Steam's Recommended Games
+
+*An analysis of the "Steam Recommended Page" data currently recorded in Google Sheets*
+
+---
+
+```{r}
+library(tidyverse)
+
+logged_data <- read_csv("https://docs.google.com/spreadsheets/d/e/2PACX-1vSNgQgD-2uGRVZMrgSd7WZ8fKjyIfZf-9nLJmLmfoGfkl63MTWI6czrAT56rloVPRysxuMrkLk9__fl/pub?output=csv")
+
+latest_data <- logged_data %>% 
+  rename(
+      name = 2,
+      single_or_multi = 3,
+      genres = 4,
+      price = 5
+      ) %>%
+  separate_rows(genres, sep = ", ")
+
+highest_price <- max(latest_data$price)
+
+lowest_price <- min(latest_data$price)
+
+mean_price <- mean(latest_data$price) %>% round(2)
+
+mean_name_length <- nchar(latest_data$name) %>% mean() %>% round()
+
+entries_count <- nrow(logged_data)
+
+genre_plot <- ggplot(data = latest_data) +
+  geom_bar(aes(x = genres, fill =), fill = "#4f95f0") +
+  labs(title = "Guns or roses?",
+       subtitle = "Comparing the counts of each genre across all recommendations",
+       caption = "(Data updated dynamically through Google Forms)",
+       x = "Game Genres",
+       y = "Number of Occurrences")
+
+playstyle_plot <- ggplot(data = latest_data) +
+  geom_bar(aes(x = single_or_multi), fill = "#231370") +
+  labs(title = "The more the merrier?",
+       subtitle = "Comparing how often multiplayer and singleplayer games were each recommended",
+       caption = "(Data updated dynamically through Google Forms)",
+       x = "Playstyle",
+       y = "Number of Recommendations")
+
+```
+
+### Recommendations for Multiplayer Vs. Singleplayer Games
+
+```{r}
+playstyle_plot
+```
+
+### Most Frequently Occuring Genres Across All Recommendations
+
+```{r}
+genre_plot
+```
+
+---
+
+### Additional Summaries
+
+Given the `r entries_count` *currently recorded* entries of recommended games, we can also
+gather the following:
+
+- The highest price is recorded at NZD$`r highest_price`.
+- The lowest price is recorded at NZD$`r lowest_price`.
+- The mean price, across all current entries, is recorded at NZD$`r mean_price`.
+- The mean title length is, on average, `r mean_name_length` characters long.
+
