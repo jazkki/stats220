@@ -11,12 +11,9 @@ knitr::opts_chunk$set(echo=FALSE, message=FALSE, warning=FALSE, error=FALSE)
 ```{css}
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100..900&display=swap');
 
-h1, h2, h3 {
-  padding:10px
-}
-
 body {
   font-family: 'Roboto Slab';
+  padding:10px
 }
 ```
 
