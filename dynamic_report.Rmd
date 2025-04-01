@@ -86,6 +86,6 @@ gather the following:
 
 - The highest price is recorded at NZD$`r highest_price`.
 - The lowest price is recorded at NZD$`r lowest_price`.
-- The mean price, across all current entries, is recorded at NZD$`r mean_price`.
+- The mean price is recorded at NZD$`r mean_price`.
 - The mean title length is, on average, `r mean_name_length` characters long.
 
